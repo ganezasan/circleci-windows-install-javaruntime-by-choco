@@ -20,13 +20,14 @@ jobs:
           command: |
             choco install -y --no-progress miniconda3
             C:\tools\miniconda3\Scripts\conda.exe init powershell
-            choco install -y --use-download-cache --trace --failstderr openssl javaruntime 
+            choco install -y openssl javaruntime 
             echo "Finished installing javaruntime"
   good-host:
     machine:
       image: windows-server-2019:201908-06
     resource_class: windows.medium
     shell: powershell.exe -ExecutionPolicy Bypass
+    parallelism: 10
     steps:
       - run:
           shell: bash.exe
@@ -41,7 +42,7 @@ jobs:
           command: |
             choco install -y --no-progress miniconda3
             C:\tools\miniconda3\Scripts\conda.exe init powershell
-            choco install -y --use-download-cache --trace --failstderr openssl javaruntime 
+            choco install -y openssl javaruntime 
             echo "Finished installing javaruntime"
             
 workflows:
