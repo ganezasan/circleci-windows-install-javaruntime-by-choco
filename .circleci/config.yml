@@ -5,6 +5,7 @@ jobs:
       image: windows-server-2019:201908-06
     resource_class: windows.medium
     shell: powershell.exe -ExecutionPolicy Bypass
+    parallelism: 10
     steps:
       - run:
           shell: bash.exe
