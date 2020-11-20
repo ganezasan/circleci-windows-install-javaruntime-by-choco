@@ -1,0 +1,51 @@
+version: 2.1
+jobs:
+  bad-host:
+    machine:
+      image: windows-server-2019:201908-06
+    resource_class: windows.medium
+    shell: powershell.exe -ExecutionPolicy Bypass
+    steps:
+      - run:
+          shell: bash.exe
+          name: add hosts
+          command: |
+            echo '184.24.36.87 sdlc-esd.oracle.com' >> C:/Windows/System32/drivers/etc/hosts
+            tracert sdlc-esd.oracle.com
+      - run:
+          name: Preparing environment - system
+          no_output_timeout: 5m 
+          shell: powershell.exe -ExecutionPolicy Bypass
+          command: |
+            choco install -y --no-progress miniconda3
+            C:\tools\miniconda3\Scripts\conda.exe init powershell
+            choco install -y --use-download-cache --trace --failstderr openssl javaruntime 
+            echo "Finished installing javaruntime"
+  good-host:
+    machine:
+      image: windows-server-2019:201908-06
+    resource_class: windows.medium
+    shell: powershell.exe -ExecutionPolicy Bypass
+    steps:
+      - run:
+          shell: bash.exe
+          name: add hosts
+          command: |
+            echo '23.35.74.212 sdlc-esd.oracle.com' >> C:/Windows/System32/drivers/etc/hosts
+            tracert sdlc-esd.oracle.com
+      - run:
+          name: Preparing environment - system
+          no_output_timeout: 5m 
+          shell: powershell.exe -ExecutionPolicy Bypass
+          command: |
+            choco install -y --no-progress miniconda3
+            C:\tools\miniconda3\Scripts\conda.exe init powershell
+            choco install -y --use-download-cache --trace --failstderr openssl javaruntime 
+            echo "Finished installing javaruntime"
+            
+workflows:
+  version: 2
+  workflow:
+    jobs:
+      - bad-host
+      - good-host
